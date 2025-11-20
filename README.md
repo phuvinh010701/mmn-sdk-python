@@ -389,78 +389,19 @@ mypy mmn/
 
 ## Release Process
 
-This project uses [Python Semantic Release](https://python-semantic-release.readthedocs.io/) for automated versioning and releases.
-
-### Commit Message Convention
-
-Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
-
-- `feat:` - New feature (minor version bump, e.g., 0.1.0 → 0.2.0)
-- `fix:` - Bug fix (patch version bump, e.g., 0.1.0 → 0.1.1)
-- `docs:` - Documentation changes (no version bump)
-- `style:` - Code style changes (no version bump)
-- `refactor:` - Code refactoring (no version bump)
-- `perf:` - Performance improvements (patch version bump)
-- `test:` - Test changes (no version bump)
-- `chore:` - Build/tooling changes (no version bump)
-- `BREAKING CHANGE:` - Breaking API changes (major version bump, e.g., 0.1.0 → 1.0.0)
-
-### Examples
-
-```bash
-# Feature (minor version bump)
-git commit -m "feat: add support for batch transaction queries"
-
-# Bug fix (patch version bump)
-git commit -m "fix: correct signature validation in MmnClient"
-
-# Breaking change (major version bump)
-git commit -m "feat: redesign IndexerClient API
-
-BREAKING CHANGE: IndexerClient methods now return Pydantic models instead of dicts"
-
-# No version bump
-git commit -m "docs: update README with new examples"
-```
-
-### Automated Releases
-
-Releases are automatically created when commits are pushed to the `main` branch:
-
-1. The GitHub Action analyzes commit messages since the last release
-2. Determines the next version based on conventional commits
-3. Updates version in `pyproject.toml` and `mmn/__init__.py`
-4. Generates/updates `CHANGELOG.md`
-5. Creates a git tag and GitHub release
-6. Publishes package artifacts
-
-### Manual Release
-
-To manually trigger a release:
-
-```bash
-# Install semantic-release
-pip install python-semantic-release
-
-# Preview next version (dry run)
-semantic-release version --no-commit
-
-# Create release
-semantic-release version
-semantic-release publish
-```
+This project uses [Python Semantic Release](https://python-semantic-release.readthedocs.io/) for automated versioning and releases. Please refer to the documentation for details on commit message conventions and release workflows.
 
 ## Architecture
 
 The SDK is organized into three main components:
 
 ```
-mmn_sdk/
-   __init__.py          # Public API exports
-   types.py             # Pydantic models and type definitions
-   indexer_client.py    # Blockchain data queries
-   zk_client.py         # Zero-knowledge proof generation
-   mmn_client.py        # Transaction and account management
+mmn/
+├── __init__.py          # Public API exports
+├── types.py             # Pydantic models and type definitions
+├── indexer_client.py    # Blockchain data queries
+├── zk_client.py         # Zero-knowledge proof generation
+└── mmn_client.py        # Transaction and account management
 ```
 
 ### Key Features
@@ -480,7 +421,7 @@ mmn_sdk/
 
 ## License
 
-MIT
+Apache 2.0
 
 ## Contributing
 
