@@ -24,7 +24,7 @@ from .types import (
 
 # Constants
 TX_TYPE_TRANSFER = 0
-TX_TYPE_FAUCET = 1
+TX_TYPE_PRIVATE_KEY = 1  # Direct private key signing (for faucet/admin operations)
 DECIMALS = 6
 ED25519_PRIVATE_KEY_LENGTH = 32
 ED25519_PUBLIC_KEY_LENGTH = 32
@@ -264,7 +264,7 @@ class MmnClient:
         signed = signing_key.sign(serialized_data)
         signature = signed.signature
 
-        if tx.type == TX_TYPE_FAUCET:
+        if tx.type == TX_TYPE_PRIVATE_KEY:
             return base58.b58encode(signature).decode("ascii")
 
         verify_key = signing_key.verify_key
@@ -435,6 +435,64 @@ class MmnClient:
             timestamp=params.timestamp,
             text_data=params.text_data,
             extra_info=params.extra_info,
+        )
+
+        return await self._add_tx(signed_tx)
+
+    async def send_transaction_by_private_key(
+        self,
+        sender: str,
+        recipient: str,
+        amount: str,
+        nonce: int,
+        private_key: str,
+        timestamp: Optional[int] = None,
+        text_data: Optional[str] = None,
+        extra_info: Optional[ExtraInfo] = None,
+    ) -> AddTxResponse:
+        """
+        Send a transaction using private key signing only (no ZK proof).
+
+        This method is used for faucet transactions or scenarios where
+        zero-knowledge proofs are not required.
+
+        Args:
+            sender: Sender address (not user ID)
+            recipient: Recipient address (not user ID)
+            amount: Amount to transfer (as string)
+            nonce: Transaction nonce
+            private_key: Private key in PKCS#8 hex format
+            timestamp: Transaction timestamp (default: current time)
+            text_data: Additional text data
+            extra_info: Extra transaction information
+
+        Returns:
+            Transaction response
+
+        Example:
+            >>> client = MmnClient(config)
+            >>> response = await client.send_transaction_by_private_key(
+            ...     sender="sender_address",
+            ...     recipient="recipient_address",
+            ...     amount="1000000",
+            ...     nonce=0,
+            ...     private_key="...",
+            ... )
+            >>> print(response.tx_hash)
+        """
+        signed_tx = self._create_and_sign_tx(
+            tx_type=TX_TYPE_PRIVATE_KEY,
+            sender=sender,
+            recipient=recipient,
+            amount=amount,
+            nonce=nonce,
+            public_key="",  # Not needed for private key type
+            private_key=private_key,
+            zk_proof="",  # No ZK proof needed
+            zk_pub="",  # No ZK public input needed
+            timestamp=timestamp,
+            text_data=text_data,
+            extra_info=extra_info,
         )
 
         return await self._add_tx(signed_tx)

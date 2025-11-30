@@ -35,6 +35,19 @@ from .indexer_client import IndexerClient, FilterParams
 from .zk_client import ZkClient
 from .mmn_client import MmnClient
 
+# Import exceptions
+from .exceptions import (
+    MmnSDKError,
+    MmnTransactionError,
+    MmnValidationError,
+    MmnNetworkError,
+    MmnAuthError,
+)
+
+# Import utilities
+from .utils import format_amount, parse_amount, is_valid_user_id
+from .validators import MmnValidator
+
 # Import types and configurations
 from .types import (
     # Client configs
@@ -76,6 +89,17 @@ __all__ = [
     "IndexerClient",
     "ZkClient",
     "MmnClient",
+    # Exceptions
+    "MmnSDKError",
+    "MmnTransactionError",
+    "MmnValidationError",
+    "MmnNetworkError",
+    "MmnAuthError",
+    # Utilities
+    "format_amount",
+    "parse_amount",
+    "is_valid_user_id",
+    "MmnValidator",
     # Constants
     "FilterParams",
     # Configurations
